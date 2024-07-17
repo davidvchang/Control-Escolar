@@ -1,0 +1,12 @@
+@use './styles/NavBar';
+
+@use './variables';
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: var(--font-Poppins);
+}

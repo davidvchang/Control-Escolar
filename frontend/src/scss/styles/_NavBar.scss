@@ -1,0 +1,67 @@
+@import '../variables';
+
+.NavBar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 200px;
+    gap: 20px;
+    padding: 0 10px;
+
+    .Title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 50px;
+        gap: 10px;
+        padding: 0 10px;
+
+        .iconSchoolControl {
+            width: 24px;
+            height: 24px;
+        }
+        span {
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+
+        .navComponent {
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+            text-decoration: none;
+
+            .iconNav {
+                width: 18px;
+                height: 18px;
+                color: $Gray-Primary-Nav;
+            }
+
+            span {
+                font-size: 14px;
+                color: $Gray-Primary-Nav
+            }
+        }
+
+        .navComponent:visited {
+            color: #000;
+        }
+
+        .navComponent:hover {
+            .iconNav, span {
+                color: #000;
+                transition: all;
+                transition-duration: 0.3s;
+            }
+        }
+    }
+}
