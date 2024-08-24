@@ -3,7 +3,7 @@ import {pool} from "../bd.js";
 
 export const getStudents = async (req, res) => {
     try {
-        const students = await pool.query('SELECT * FROM students')
+        const students = await pool.query('SELECT * FROM estudiantes')
         res.status(200).send(students.rows)
     } catch (ex) {
         console.log('Ha ocurrido un error al consultar a los estudiantes: ' + ex)
@@ -11,13 +11,13 @@ export const getStudents = async (req, res) => {
 }
 
 export const getOneStudent = async (req, res) => {
-    const {controlNumber} = req.params
+    const {num_control} = req.params
 
     try {
-        const ExistStudent = await pool.query('SELECT COUNT(*) AS Exist FROM students WHERE controlnumber = $1', [controlNumber])
+        const ExistStudent = await pool.query('SELECT COUNT(*) AS Exist FROM estudiantes WHERE num_control = $1', [num_control])
         console.log(ExistStudent.rows[0].exist)
         if(ExistStudent.rows[0].exist > 0) {
-            const students = await pool.query('SELECT * FROM students WHERE controlnumber = $1', [controlNumber])
+            const students = await pool.query('SELECT * FROM estudiantes WHERE num_control = $1', [num_control])
             console.log(students.rows)
             res.status(200).send(students.rows)
         }
@@ -30,10 +30,10 @@ export const getOneStudent = async (req, res) => {
 }
 
 export const insertStudent = async (req, res) => {
-    const {name, lastName, controlNumber, phoneNumber} = req.body
+    const {nombre, apellidos, num_control, numero_telefono, carrera, semestre, turno, correo} = req.body
 
     try {
-        await pool.query(`INSERT INTO students (name, lastname, controlnumber, phonenumber) Values ($1, $2, $3, $4)`, [name, lastName, controlNumber, phoneNumber])
+        await pool.query(`INSERT INTO estudiantes (nombre, apellidos, num_control, numero_telefono, carrera, semestre, turno, correo) Values ($1, $2, $3, $4, $5, $6, $7, $8)`, [nombre, apellidos, num_control, numero_telefono, carrera, semestre, turno, correo])
         console.log('Alumno guardado correctamente')
         res.send('Alumno guardado correctamente')
     } catch (ex) {
@@ -42,14 +42,14 @@ export const insertStudent = async (req, res) => {
 }
 
 export const deleteStudent = async (req, res) => {
-    const {controlNumber} = req.params
+    const {num_control} = req.params
 
     try {
-        const ExistStudent = await pool.query('SELECT COUNT(*) AS Exist FROM students WHERE controlnumber = $1', [controlNumber])
+        const ExistStudent = await pool.query('SELECT COUNT(*) AS Exist FROM estudiantes WHERE num_control = $1', [num_control])
         console.log(ExistStudent.rows[0].exist)
 
         if(ExistStudent.rows[0].exist > 0) {
-            await pool.query('DELETE FROM students WHERE controlnumber = $1', [controlNumber])
+            await pool.query('DELETE FROM estudiantes WHERE num_control = $1', [num_control])
             res.status(204).json({ message: 'Alumno eliminado correctamente'})
             console.log('Alumno eliminado correctamente')
         }
@@ -64,11 +64,11 @@ export const deleteStudent = async (req, res) => {
 }
 
 export const updateStudent = async (req, res) => {
-    const {name, lastName, phoneNumber} = req.body
-    const {controlNumber} = req.params
+    const {nombre, apellidos, numero_telefono, carrera, semestre, turno, correo} = req.body
+    const {num_control} = req.params
 
     try {
-        await pool.query('UPDATE students SET name = $1, lastname = $2, controlnumber = $4, phonenumber = $3 WHERE controlnumber = $4', [name, lastName, phoneNumber, controlNumber])
+        await pool.query('UPDATE estudiantes SET nombre = $1, apellidos = $2, numero_telefono = $3, carrera = $4, semestre = $5, turno = $6, correo = $7 WHERE num_control = $8', [nombre, apellidos, numero_telefono, carrera, semestre, turno, correo])
         res.status(204).json({ message: 'Alumno Actualizado correctamente'})
         console.log('Alumno Actualizado correctamente')
     } catch (ex) {

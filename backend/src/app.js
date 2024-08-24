@@ -22,6 +22,6 @@ app.use(morgan("dev"))
 app.use(express.json())
 
 //ROUTES
-app.use('/api/students', studentsRoutes)
+app.use('/api/estudiantes', studentsRoutes)
 
 export default app

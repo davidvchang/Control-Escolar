@@ -21,8 +21,8 @@
             height: 24px;
         }
         span {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 600;
         }
     }
 
@@ -36,13 +36,13 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             padding: 0 10px;
             text-decoration: none;
 
             .iconNav {
-                width: 18px;
-                height: 18px;
+                width: 22px;
+                height: 22px;
                 color: $Gray-Primary-Nav;
             }
 
