@@ -1,0 +1,123 @@
+@import '../variables';
+
+.studentsSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+    .containerActions {
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+        width: 100%;
+        justify-content: space-around;
+        margin-bottom: 28px;
+
+        .titleSearch {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            span {
+                font-size: 22px;
+                font-weight: 600;
+            }
+
+            .inputSearchcontainer {
+                display: flex;
+                flex-direction: row;
+
+                input {
+                    padding: 10px 20px;
+                    width: 250px;
+                    border-radius: 3px;
+                    border: 1px solid #ccc;
+                    outline: none;
+                    height: fit-content;
+                }
+
+                input:focus {
+                    border-color: #3881d4; /* Cambia el color del borde al enfocar si lo deseas */
+                    transition: all;
+                    transition-duration: 0.3s;
+                }
+                
+                input::placeholder {
+                    color: #797979;
+                    
+                }
+
+                button {
+                    width: 50px;
+                    border-radius: 0 7px 7px 0;
+                    border: #3881d4 0 solid;
+                    background-color: #1677FF;
+                    cursor: pointer;
+
+                    .iconSearch {
+                        width: 14px;
+                        height: 14px;
+                        stroke-width: 2px;
+                        color: white;
+                    }
+                }
+
+                button:hover {
+                    background-color: #4096FF;
+                    transition: all;
+                    transition-duration: 0.3s;
+
+                }
+            }
+        }
+        
+
+
+        
+
+        .addStudentButton {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: fit-content;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: green;
+            color: white;
+            height: fit-content;
+            align-self: flex-end;
+        }
+
+        .addStudentButton:hover {
+            filter: opacity(0.8);
+            transition: all;
+            transition-duration: 0.3s;
+            
+        }
+    }
+
+    /* Estilos CSS para la tabla */
+    .ant-table {
+        border: 2px solid #d9d9d9; /* Borde de la tabla */
+        min-width: 100%;
+    }
+
+    .ant-table-thead > tr > th {
+        background-color: #b9b9b9; /* Color de fondo de los encabezados */
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    .ant-table-tbody > tr > td {
+        padding: 10px 16px; /* Padding en las celdas */
+    }
+
+
+    .searchTable {
+        width: 300px;
+    }
+
+}

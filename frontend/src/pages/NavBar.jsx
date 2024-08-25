@@ -9,8 +9,8 @@ function NavBar() {
         </div>
 
         <div className='nav'>
-            <Nav to='' icon={iconPanel} text='Panel'/>
-            <Nav to='' icon={iconStudents} text='Estudiantes'/>
+            <Nav to='/' icon={iconPanel} text='Panel'/>
+            <Nav to='/estudiantes' icon={iconStudents} text='Estudiantes'/>
             <Nav to='' icon={iconTeachers} text='Profesores'/>
             <Nav to='' icon={iconSubject} text='Materias'/>
             <Nav to='' icon={iconSettings} text='Configuración'/>
