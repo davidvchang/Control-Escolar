@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
 
 function AddStudent({ closeModal }) {
 
-    
+    let {num_control} = useParams()  //Obtiene el id de la url
 
     const initialValue = {
         nombre: '',
@@ -17,17 +18,17 @@ function AddStudent({ closeModal }) {
         correo: '',
     }
 
-    const captureData = (e) => {
-        const {name, value} = e.target
-        setDataStudent({...dataStudent, [name]: value})
-      }
+    //Hacer una pedicion a la API
+    useEffect(() => {
+        if(num_control) {
+            getOneStudent(num_control)
+        }
+    }, [num_control])
 
-    const SaveStudent = async (e) => {
-        e.preventDefault(); //Se usa para que no recargue la página al enviar
-
+    const getOneStudent = async (num_control) => {
         try {
-            //Guardar datos en el backend
-            const newStudent = {
+            const dataStudent = await axios.get(`http://localhost:4000/api/estudiantes/${num_control}`)
+            setDataStudent({
                 nombre: dataStudent.nombre,
                 apellidos: dataStudent.apellidos,
                 num_control: dataStudent.num_control,
@@ -36,29 +37,69 @@ function AddStudent({ closeModal }) {
                 semestre: dataStudent.semestre,
                 turno: dataStudent.turno,
                 correo: dataStudent.correo
-            }
-        
-            await axios.post('http://localhost:4000/api/estudiantes', newStudent)
-        
-            Swal.fire({
-                title: 'Éxito',
-                text: 'Alumno guardado correctamente',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                closeModal(); // Cerrar el modal
-                setDataStudent({ ...initialValue }); // Reiniciar el formulario
-            });
+            })
             
-            } catch (ex) {
+        } catch (ex) {
+            console.error('Error fetching student:', ex);
+            setMessage('Error al obtener el estudiante');
+        }
+      }
+
+    const captureData = (e) => {
+        const {name, value} = e.target
+        setDataStudent({...dataStudent, [name]: value})
+      }
+
+    const saveOrUpdateStudent = async (e) => {
+        e.preventDefault(); //Se usa para que no recargue la página al enviar
+
+        try {
+
+            if(num_control) {
+                // Actualizar estudiante
+                await axios.put(`http://localhost:4000/api/estudiantes/${num_control}`, dataStudent);
                 Swal.fire({
-                    title: 'Error',
-                    text: 'Ha ocurrido un error al guardar el alumno',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
+                    title: 'Éxito',
+                    text: 'Alumno actualizado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
                 });
             }
 
+            else {
+
+                //Guardar datos en el backend
+                const newStudent = {
+                    nombre: dataStudent.nombre,
+                    apellidos: dataStudent.apellidos,
+                    num_control: dataStudent.num_control,
+                    numero_telefono: dataStudent.numero_telefono,
+                    carrera: dataStudent.carrera,
+                    semestre: dataStudent.semestre,
+                    turno: dataStudent.turno,
+                    correo: dataStudent.correo
+                }
+            
+                await axios.post('http://localhost:4000/api/estudiantes', newStudent)
+            
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Alumno guardado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    closeModal(); // Cerrar el modal
+                    setDataStudent({ ...initialValue }); // Reiniciar el formulario
+                });
+            }
+        } catch (ex) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ha ocurrido un error al guardar el alumno',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
         setDataStudent({...initialValue})
     }
 
@@ -71,9 +112,9 @@ function AddStudent({ closeModal }) {
     
         <div className="modal-overlay" onClick={closeModal}></div>
         <div className='addStudent'>
-            <h2>Agregar Estudiante</h2>
+            <h2>{num_control ? 'Actualizar Estudiante' : 'Agregar Estudiante'}</h2>
 
-            <form className='addStudentForm' onSubmit={SaveStudent}>
+            <form className='addStudentForm' onSubmit={saveOrUpdateStudent}>
                 <div className='formRow'>
                     <div className='formGroup'>
                         <label>Nombre:</label>
@@ -104,14 +145,14 @@ function AddStudent({ closeModal }) {
                         <select name="carrera" value={dataStudent.carrera} onChange={captureData} required>
                             <option value="">Seleccionar carrera</option>
                             <hr />
-                            <option value="ingenieria_sistemas_computacionales">Ingeniería en Sistemas Computacionales</option>
-                            <option value="industrial">Ingeniería Industrial</option>
-                            <option value="gestion_empresarial"> Ingeniería en Gestión Empresarial</option>
-                            <option value="mecatronica">Ingeniería Mecatrónica</option>
-                            <option value="electronica">Ingeniería Electrónica</option>
-                            <option value="industrias_alimentarias">Ingeniería en Industrias Alimentarias</option>
-                            <option value="innovacion_agricola_sustentable">Ingeniería en Innovación Agrícola Sustentable</option>
-                            <option value="mecanica">Ingeniería Mecánica</option>
+                            <option value="ingenieria en sistemas computacionales">Ingeniería en Sistemas Computacionales</option>
+                            <option value="ingenieria industrial">Ingeniería Industrial</option>
+                            <option value="ingenieria en gestion empresarial"> Ingeniería en Gestión Empresarial</option>
+                            <option value="ingenieria mecatronica">Ingeniería Mecatrónica</option>
+                            <option value="ingenieria electronica">Ingeniería Electrónica</option>
+                            <option value="ingenieria en industrias alimentarias">Ingeniería en Industrias Alimentarias</option>
+                            <option value="ingenieria en innovacion agricola sustentable">Ingeniería en Innovación Agrícola Sustentable</option>
+                            <option value="ingenieria mecanica">Ingeniería Mecánica</option>
                         </select>
                     </div>
 

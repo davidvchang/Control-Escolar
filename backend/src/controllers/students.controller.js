@@ -43,6 +43,7 @@ export const insertStudent = async (req, res) => {
 
 export const deleteStudent = async (req, res) => {
     const {num_control} = req.params
+    console.log("Num Control recibido:", num_control);
 
     try {
         const ExistStudent = await pool.query('SELECT COUNT(*) AS Exist FROM estudiantes WHERE num_control = $1', [num_control])
@@ -50,7 +51,7 @@ export const deleteStudent = async (req, res) => {
 
         if(ExistStudent.rows[0].exist > 0) {
             await pool.query('DELETE FROM estudiantes WHERE num_control = $1', [num_control])
-            res.status(204).json({ message: 'Alumno eliminado correctamente'})
+            res.status(200).json({ message: 'Alumno eliminado correctamente'})
             console.log('Alumno eliminado correctamente')
         }
         else {
@@ -59,7 +60,7 @@ export const deleteStudent = async (req, res) => {
         }
     } catch (ex) {
         console.log('Ha ocurrido un error al eliminar alumno: ' + ex)
-        res.send('Ha ocurrido un error al eliminar alumno: ' + ex)
+        res.status(500).json({ message: 'Ha ocurrido un error al eliminar alumno', error: ex.message });
     }
 }
 
@@ -69,10 +70,10 @@ export const updateStudent = async (req, res) => {
 
     try {
         await pool.query('UPDATE estudiantes SET nombre = $1, apellidos = $2, numero_telefono = $3, carrera = $4, semestre = $5, turno = $6, correo = $7 WHERE num_control = $8', [nombre, apellidos, numero_telefono, carrera, semestre, turno, correo])
-        res.status(204).json({ message: 'Alumno Actualizado correctamente'})
+        res.status(200).json({ message: 'Alumno Actualizado correctamente'})
         console.log('Alumno Actualizado correctamente')
     } catch (ex) {
         console.log('Ha ocurrido un error al eliminar alumno: ' + ex)
-        res.send('Ha ocurrido un error al eliminar alumno: ' + ex)
+        res.status(500).json({ message: 'Ha ocurrido un error al actualizar alumno', error: ex.message });
     }
 }
