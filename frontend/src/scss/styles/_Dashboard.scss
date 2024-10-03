@@ -1,0 +1,47 @@
+@import '../variables';
+
+.dashboardSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100vw;
+    height: 100vh;
+    padding: 30px;
+
+    span {
+        color: black;
+        font-size: 26px;
+        font-weight: 100;
+    }
+
+    .containerInfoCounter {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+        width:100%;
+
+        .dashboardCounter {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: fit-content;
+            flex-grow: 1;
+            flex-basis: calc(50% - 20px);
+            border: 1px solid #d4d4d4;
+            border-radius: 10px;
+    
+            span {
+                color: #6B7280;
+                font-weight: 100;
+                font-size: 15px;
+            }
+    
+            .number {
+                font-size: 36px;
+                color: black;
+            }
+        }
+    }
+
+}
