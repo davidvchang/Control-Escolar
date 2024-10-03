@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { useParams } from 'react-router-dom';
 
-function AddStudent({ closeModal }) {
-
-    let {num_control} = useParams()  //Obtiene el id de la url
+function AddStudent({ closeModal, num_control }) {
 
     const initialValue = {
         nombre: '',
@@ -18,16 +15,24 @@ function AddStudent({ closeModal }) {
         correo: '',
     }
 
+    const [dataStudent, setDataStudent] = useState(initialValue);
+
     //Hacer una pedicion a la API
     useEffect(() => {
         if(num_control) {
             getOneStudent(num_control)
+            window.history.pushState(null, '', `/${num_control}`);
+        }
+        else {
+            setDataStudent(initialValue); // Reiniciar el formulario si no hay num_control
         }
     }, [num_control])
 
     const getOneStudent = async (num_control) => {
         try {
-            const dataStudent = await axios.get(`http://localhost:4000/api/estudiantes/${num_control}`)
+            const response  = await axios.get(`http://localhost:4000/api/estudiantes/${num_control}`)
+            const dataStudent = response.data;
+            console.log("datos: ", dataStudent)
             setDataStudent({
                 nombre: dataStudent.nombre,
                 apellidos: dataStudent.apellidos,
@@ -38,6 +43,8 @@ function AddStudent({ closeModal }) {
                 turno: dataStudent.turno,
                 correo: dataStudent.correo
             })
+
+
             
         } catch (ex) {
             console.error('Error fetching student:', ex);
@@ -102,10 +109,6 @@ function AddStudent({ closeModal }) {
         }
         setDataStudent({...initialValue})
     }
-
-
-    const [dataStudent, setDataStudent] = useState(initialValue);
-
 
   return (
     <>

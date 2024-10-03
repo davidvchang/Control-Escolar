@@ -4,10 +4,10 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
-    min-width: 200px;
-    max-width: 200px;
+    min-width: 250px;
+    max-width: 250px;
     gap: 20px;
-    padding: 0 10px;
+    padding: 0;
     border-right: 1px solid #d4d4d4;
 
     .Title {
@@ -16,40 +16,64 @@
         align-items: center;
         height: 50px;
         gap: 10px;
-        padding: 0 10px;
+        padding: 10px 10px;
+        justify-content: space-between;
 
         .iconSchoolControl {
             width: 24px;
             height: 24px;
         }
         span {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
+            width: fit-content;
         }
+
+        button {
+            padding: 10px;
+            border-radius: 10px;
+
+            .iconLeft {
+                width: 18px;
+                height: 18px;
+                color: $Gray-Primary-Nav;
+            }
+        }
+
+        button:hover {
+            background-color: #3881d4;
+            transition: all;
+            transition-duration: 0.2s;
+
+            .iconLeft {
+                color: #d4d4d4;
+            }
+        }
+
     }
 
     .nav {
         display: flex;
         flex-direction: column;
-        gap: 14px;
 
         .navComponent {
 
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 8px;
-            padding: 0 10px;
+            gap: 10px;
+            padding: 10px 10px;
             text-decoration: none;
 
             .iconNav {
-                width: 22px;
-                height: 22px;
+                width: 26px;
+                height: 26px;
                 color: $Gray-Primary-Nav;
             }
 
             span {
-                font-size: 14px;
+                font-size: 16px;
+                font-weight: 300;
                 color: $Gray-Primary-Nav
             }
         }
@@ -59,10 +83,16 @@
         }
 
         .navComponent:hover {
+            background-color: #3881d4;
+            
+            transition: all;
+            transition-duration: 0.2s;
             .iconNav, span {
-                color: #000;
-                transition: all;
-                transition-duration: 0.3s;
+                color: #d4d4d4;
+            }
+
+            span {
+                color: #d4d4d4;
             }
         }
     }
