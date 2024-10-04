@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import studentsRoutes from "./routes/students.routes.js";
+import teachersRoutes from "./routes/teachers.routes.js";
 
 const app = express()
 
@@ -23,5 +24,6 @@ app.use(express.json())
 
 //ROUTES
 app.use('/api/estudiantes', studentsRoutes)
+app.use('/api/profesores', teachersRoutes)
 
 export default app

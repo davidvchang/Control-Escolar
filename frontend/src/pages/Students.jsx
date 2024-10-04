@@ -9,9 +9,13 @@ function Students() {
     const [students, setStudents] = useState([]);
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [studentSelectedToEdit, setStudentSelectedToEdit] = useState('');
+    const [nameComponents, setNameComponents] = useState(false)
 
     // const closeModal = () => setIsModalOpen(false);
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        setIsModalOpen(true);
+        setNameComponents(true)
+    }
 
 
     // const { Search } = tableStudents;
@@ -134,7 +138,7 @@ function Students() {
         </div>
 
         {/* Mostrar el modal si isModalOpen es true */} 
-      {isModalOpen && <AddStudent closeModal={closeModal} num_control={studentSelectedToEdit}/>}
+      {isModalOpen && <AddStudent closeModal={() => setIsModalOpen(false)} num_control={studentSelectedToEdit} isStudent={nameComponents}/>}
     </section>
   )
 }

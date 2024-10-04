@@ -2,6 +2,7 @@ import React from 'react'
 import Nav from '../components/Nav'
 
 function NavBar() {
+
   return (
     <section className='NavBar'>
         <div className='Title'>

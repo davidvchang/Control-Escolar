@@ -1,8 +1,80 @@
-import React from 'react'
+import AddStudent from './AddStudent'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function Teachers() {
 
+    const [teachers, setTeachers] = useState([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [nameComponents, setNameComponents] = useState(false)
+    const [filteredTeachers, setFilteredTeachers] = useState([]);
 
+    const openModal = () => {
+        setIsModalOpen(true);
+        setNameComponents(true)
+    }
+
+    const closeModal = () => {
+        setIsModalOpen(false); // Cierra el modal
+    };
+
+    const fetchProfesores = async () => {
+        try {
+            const response = await axios.get('http://localhost:4000/api/profesores')
+            setTeachers(response.data)
+            setFilteredTeachers(response.data)
+        } catch (ex) {
+            console.log("Ha ocurrido un error: ", ex)
+        }
+        
+    }
+
+    const deleteTeacher = async (clave) => {
+        try {
+            const result = await Swal.fire({
+                title: '¿Estás seguro que deseas eliminar este profesor?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+            if(result.isConfirmed) {
+                await axios.delete('http://localhost:4000/api/profesores/' + clave)
+                setTeachers(teachers.filter(teacher => teacher.clave !== clave)); // Actualiza el estado después de eliminar
+                // Recargar la lista de profesores después de eliminar
+                console.log('se preciono el boton de eliminar')
+                await fetchProfesores(); 
+            }
+          
+        } catch (ex) {
+          console.error('Error deleting student:', ex);
+          Swal.fire('Error!', 'No se pudo eliminar el alumno. Inténtalo de nuevo.', 'ex');
+        }
+      }
+
+       // Función para manejar la búsqueda
+    const handleSearch = (value) => {
+        if (value) {
+            const filtered = teachers.filter(teacher =>
+                teacher.clave.includes(value) // Filtrar por número de control
+            );
+            setFilteredTeachers(filtered);
+        } else {
+            setFilteredTeachers(students); // Mostrar todos los estudiantes si no hay búsqueda
+        }
+    };
+
+    const handleEditStudentClick = (num_control) => {
+        setIsModalOpen(true); // Abre el modal
+    };
+
+    useEffect(() => {
+        fetchProfesores()
+    }, [isModalOpen])
+    
 
   return (
     <section className='studentsSection'>
@@ -11,12 +83,12 @@ function Teachers() {
                 <span>Profesores</span>
 
                 <div className='inputSearchcontainer'>
-                    <input type="search" name="searchStudent" id="searchStudent" placeholder='Buscar alumno...' onChange={e => handleSearch(e.target.value)}/>
+                    <input type="search" name="searchStudent" id="searchStudent" placeholder='Buscar profesor...' onChange={e => handleSearch(e.target.value)}/>
                     <button className='text-center'>{iconSearch}</button>
                 </div>
             </div>
 
-            <button className='addStudentButton' >Agregar Profesores</button>
+            <button className='addStudentButton' onClick={openModal}>Agregar Profesores</button>
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -25,45 +97,39 @@ function Teachers() {
                         <th scope="col" className="px-6 py-3 text-center">ID</th>
                         <th scope="col" className="px-6 py-3 text-center">Apellidos</th>
                         <th scope="col" className="px-6 py-3 text-center">Nombre</th>
-                        <th scope="col" className="px-6 py-3 text-center">Número de Control</th>
+                        <th scope="col" className="px-6 py-3 text-center">Clave</th>
                         <th scope="col" className="px-6 py-3 text-center">Número de Teléfono</th>
-                        <th scope="col" className="px-6 py-3 text-center">Carrera</th>
-                        <th scope="col" className="px-6 py-3 text-center">Materia</th>
-                        <th scope="col" className="px-6 py-3 text-center">Turno</th>
                         <th scope="col" className="px-6 py-3 text-center">Correo</th>
                         <th scope="col" className="px-6 py-3 text-center">Acciones</th>
                     </tr>
                 </thead>
-                {/* <tbody class="text-xs font-medium text-gray-500 uppercase bg-white dark:bg-white dark:text-slate-700 select-none">
-                    {filteredStudents.map((student) => (
+                <tbody class="text-xs font-medium text-gray-500 uppercase bg-white dark:bg-white dark:text-slate-700 select-none">
+                    {filteredTeachers.map((teacher) => (
 
-                        <tr class="bg-white border-b dark:bg-white dark:border-gray-300 hover:bg-white dark:hover:bg-slate-200" key={student.id}>
+                        <tr class="bg-white border-b dark:bg-white dark:border-gray-300 hover:bg-white dark:hover:bg-slate-300" key={teacher.id}>
                             <th scope="row" class="px-6 py-4 font-medium text-slate-600 whitespace-nowrap dark:text-slate-600">
-                                {student.id}
+                                {teacher.id}
                             </th>
-                            <td className="px-6 py-4">{student.apellidos}</td>
-                            <td className="px-6 py-4">{student.nombre}</td>
-                            <td className="px-6 py-4 text-center">{student.num_control}</td>
-                            <td className="px-6 py-4 text-center">{student.numero_telefono}</td>
-                            <td className="px-6 py-4 max-w-80">{student.carrera}</td>
-                            <td className="px-6 py-4 text-center">{student.semestre}</td>
-                            <td className="px-6 py-4 text-center">{student.turno}</td>
-                            <td className="px-6 py-4 text-center lowercase">{student.correo}</td>
+                            <td className="px-6 py-4">{teacher.apellidos}</td>
+                            <td className="px-6 py-4">{teacher.nombre}</td>
+                            <td className="px-6 py-4 text-center">{teacher.clave}</td>
+                            <td className="px-6 py-4 text-center">{teacher.telefono}</td>
+                            <td className="px-6 py-4 text-center lowercase">{teacher.correo}</td>
                             <td class="px-6 py-4 text-right">
                                 <div className='btnsActionesStudents'>
-                                    <Link onClick={() => handleEditStudentClick(student.num_control)} class="  font-semibold  p-2 rounded hover:no-underline hover:transition-all duration-300 btnUpdate">{iconUpdate} </Link>
-                                    <button onClick={() => deleteStudent(student.num_control)} class="  font-semibold  p-2 rounded hover:no-underline hover:transition-all duration-300 btnDelete">{iconDelete}</button>
+                                    <Link  class="  font-semibold  p-2 rounded hover:no-underline hover:transition-all duration-300 btnUpdate">{iconUpdate} </Link>
+                                    <button onClick={() => deleteTeacher(teacher.clave)} class="  font-semibold  p-2 rounded hover:no-underline hover:transition-all duration-300 btnDelete">{iconDelete}</button>
 
                                 </div>
                             </td>
                         </tr>
                     ))}
-                </tbody> */}
+                </tbody>
             </table>
         </div>
 
         {/* Mostrar el modal si isModalOpen es true */} 
-      {/* {isModalOpen && <AddStudent closeModal={closeModal} num_control={studentSelectedToEdit}/>} */}
+      {isModalOpen && <AddStudent closeModal={() => setIsModalOpen(false)} isTeacher={nameComponents}/>}
     </section>
   )
 }

@@ -69,7 +69,7 @@ export const updateStudent = async (req, res) => {
     const {num_control} = req.params
 
     try {
-        await pool.query('UPDATE estudiantes SET nombre = $1, apellidos = $2, numero_telefono = $3, carrera = $4, semestre = $5, turno = $6, correo = $7 WHERE num_control = $8', [nombre, apellidos, numero_telefono, carrera, semestre, turno, correo])
+        await pool.query('UPDATE estudiantes SET nombre = $1, apellidos = $2, numero_telefono = $3, carrera = $4, semestre = $5, turno = $6, correo = $7 WHERE num_control = $8', [nombre, apellidos, numero_telefono, carrera, semestre, turno, correo, num_control])
         res.status(200).json({ message: 'Alumno Actualizado correctamente'})
         console.log('Alumno Actualizado correctamente')
     } catch (ex) {
